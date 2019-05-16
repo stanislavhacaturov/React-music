@@ -9,9 +9,7 @@ class Signin extends Component {
             username: '',
             lastname: '',
             email: '',
-            password: '',
-            error: '',
-            message: ''
+            password: ''
         }    
     }
 

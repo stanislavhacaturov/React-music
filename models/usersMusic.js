@@ -6,7 +6,7 @@ let usersMusic = new Schema(
     song: {
       type: String,
       required: true,
-      default: "NoName"
+      unique: true,
     },
     autor: {
         type: String,

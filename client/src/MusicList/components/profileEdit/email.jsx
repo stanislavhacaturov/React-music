@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 
 class Email extends Component {
@@ -31,6 +31,14 @@ class Email extends Component {
     });
   }
 
+  editInput = () => {
+    const { changeInput } = this.state;
+
+    this.setState({
+      changeInput: !changeInput,
+    });
+  }
+
   edit = () => {
     const userId = localStorage.getItem('user');
     const { email, changeInput } = this.state;
@@ -41,7 +49,14 @@ class Email extends Component {
 
     axios.post(`http://localhost:3001/emailEdit`,
       { userId, email }
-    ).catch(err => console.log('err', err))
+    ).then(result => {
+      const data = result.data
+      
+      this.setState({
+        email: data.email,
+      });
+		})
+    .catch(err => console.log('err', err))
   }
 
   render() {
@@ -49,10 +64,15 @@ class Email extends Component {
     return (
         <li className='item'>
         {changeInput ? 
-            <input type='email' className='editInput' value={email} onChange={this.handleInputChange}/> :
+          <Fragment>
+            <input type='email' className='editInput' value={email} onChange={this.handleInputChange}/> 
+            <button className='edit' onClick={this.edit}>Save</button>
+          </Fragment>:
+          <Fragment>
             <span className='text'>Email: {email}</span>
+            <button className='edit' onClick={this.editInput}>Edit</button>
+          </Fragment>
         }
-        <button className='edit' onClick={this.edit}>Edit</button>
         </li>
     );
   }

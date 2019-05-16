@@ -6,15 +6,11 @@ const withAuth = require('../middleware');
 
 const models = require('../models/user');
 
-// const secret = require('../config');
-const secret = 'mysecretsshhh';
+const { secret } = require('../secrets');
 
 router.post('/register', (req, res) => {
 
-	const username = req.body.user.username;
-	const lastname = req.body.user.lastname;
-	const email = req.body.user.email;
-	const password = req.body.user.password;
+	const { username, lastname, email, password } = req.body.user;
 
 	if (!username || !password || !lastname || !email) {
 		res.status(401)
@@ -71,8 +67,8 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/authorization', (req, res) => {
-	const email = req.body.user.email;
-	const password = req.body.user.password;
+
+	const { email, password } = req.body.user;
 
 	if (!email || !password) {
 		res.status(401)
@@ -131,7 +127,7 @@ router.post('/authorization', (req, res) => {
 });
 
 router.post('/profile', (req, res) => {
-	const { userId } = req.body
+	const { userId } = req.body;
 
 	models.find({_id: userId}).then((user) => {
 		res.send(user);
@@ -139,57 +135,113 @@ router.post('/profile', (req, res) => {
 });
 
 router.post('/userNameEdit', (req, res) => {
-	const { username, userId } = req.body
+	const { username, userId } = req.body;
 
 	models.findById(userId)
 		.then(result => {
-			if (username.length > 0) {
+			if (username && username !== username.email) {
 				result.username = username;
 				res.send(result);
 				return result.save()
 			}
 		})
+		.catch(err => {
+			console.log(err);
+			res.status(500)
+			.json({
+				ok: false,
+				error: 'Ошибка, попробуйте позже!'
+			});
+		});
 })
 
 router.post('/lastNameEdit', (req, res) => {
-	const { lastname, userId } = req.body
+	const { lastname, userId } = req.body;
 
 	models.findById(userId)
 		.then(result => {
-			if (lastname.length > 0) {
+			if (lastname && lastname !== lastname.email) {
 				result.lastname = lastname;
 				res.send(result);
 				return result.save()
+			} else {
+				res.send(result);
 			}
 		})
+		.catch(err => {
+			console.log(err);
+			res.status(500)
+			.json({
+				ok: false,
+				error: 'Ошибка, попробуйте позже!'
+			});
+		});
 })
 
 router.post('/emailEdit', (req, res) => {
-	const { email, userId } = req.body
+	const { email, userId } = req.body;
 
+	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	
 	models.findById(userId)
 		.then(result => {
-			if (email.length > 0) {
+			if (email && email !== result.email && reg.test(email) == true) {
 				result.email = email;
 				res.send(result);
 				return result.save()
+			} else {
+				res.send(result);
 			}
 		})
+		.catch(err => {
+			console.log(err);
+			res.status(500)
+			.json({
+				ok: false,
+				error: 'Ошибка, попробуйте позже!'
+			});
+		});
+		
 })
 
 router.post('/passwordEdit', (req, res) => {
-	const { password, userId } = req.body
+	const { password, newPassword, userId } = req.body;
 
 	models.findById(userId)
 		.then(result => {
-			if (password.length > 0) {
-				bcrypt.hash(password, null, null, (err, hash) => {
-					result.password = hash;
-					res.send(result);
-					return result.save()
+			if (!password || !newPassword) {
+				res.status(401)
+				.json({
+					ok: false,
+					error: 'Все поля должны быть заполнены!'
+				});
+			} else {
+				bcrypt.compare(password, result.password, function (err, pass) {
+					if (pass) {
+					bcrypt.hash(newPassword, null, null, (err, hash) => {
+						result.password = hash;
+						res.sendStatus(200);
+						return result.save()
+					})
+					} else {
+						res.status(401)
+						.json({
+							ok: false,
+							error: 'Пароль неверен!'
+						});
+					}
 				})
 			}
 		})
+		.catch(err => {
+			console.log(err);
+			res.status(500)
+			.json({
+				ok: false,
+				error: 'Ошибка, попробуйте позже!'
+			});
+		});
+		
 })
 
 router.post('/checkToken', withAuth, (req, res) => {

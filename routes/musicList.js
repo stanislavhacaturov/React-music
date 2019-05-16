@@ -11,7 +11,7 @@ router.post('/allMusic', (req, res) => {
 });
 
 router.post('/myMusic', (req, res) => {
-	const { userId } = req.body
+	const { userId } = req.body;
 
 	usersMusic.find({autor: userId}).then((MyMusic) => {
 		res.send(MyMusic);
@@ -19,7 +19,7 @@ router.post('/myMusic', (req, res) => {
 });
 
 router.post('/likeSong', (req, res) => {
-	const { text, userId } = req.body
+	const { text, userId } = req.body;
 
 	const likedSong = new usersMusic({
 		song: text,
@@ -40,23 +40,31 @@ router.post('/deleteSong/:id', (req, res) => {
 		})
 })
 
-router.post('/addSong', async (req, res) => {
-	const { song1, song2, song3 } = req.body
+router.post('/addSong', (req, res) => {
+	const { song1, song2, song3 } = req.body;
 
-	const newSong1 = new models({
-		song: song1
-	});
-	await newSong1.save();
+	models.find({}).then((allMusic) => {
+		if (allMusic < 1) {
+			const newSong1 = new models({
+				song: song1
+			});
+			newSong1.save();
 
-	const newSong2 = new models({
-		song: song2
-	});
-	await newSong2.save();
+			const newSong2 = new models({
+				song: song2
+			});
+			newSong2.save();
 
-	const newSong3 = new models({
-		song: song3
+			const newSong3 = new models({
+				song: song3
+			});
+			newSong3.save();
+
+			res.sendStatus(200);
+		} else {
+			res.sendStatus(401);
+		}
 	});
-	await newSong3.save();
 });
 
 module.exports = router;

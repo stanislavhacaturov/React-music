@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 
 class LastName extends Component {
@@ -31,6 +31,14 @@ class LastName extends Component {
     });
   }
 
+  editInput = () => {
+    const { changeInput } = this.state;
+
+    this.setState({
+      changeInput: !changeInput,
+    });
+  }
+  
   edit = () => {
     const userId = localStorage.getItem('user');
     const { lastname, changeInput } = this.state;
@@ -41,7 +49,14 @@ class LastName extends Component {
 
     axios.post(`http://localhost:3001/lastNameEdit`,
       { userId, lastname }
-    ).catch(err => console.log('err', err))
+    ).then(result => {
+      const data = result.data
+      
+      this.setState({
+        lastname: data.lastname,
+      });
+		})
+    .catch(err => console.log('err', err))
   }
 
   render() {
@@ -49,10 +64,15 @@ class LastName extends Component {
     return (
         <li className='item'>
         {changeInput ? 
-            <input className='editInput' value={lastname} onChange={this.handleInputChange}/> :
+          <Fragment>
+            <input className='editInput' value={lastname} onChange={this.handleInputChange}/> 
+            <button className='edit' onClick={this.edit}>Save</button>
+          </Fragment>:
+          <Fragment>
             <span className='text'>Last Name: {lastname}</span>
+            <button className='edit' onClick={this.editInput}>Edit</button>
+          </Fragment>
         }
-        <button className='edit' onClick={this.edit}>Edit</button>
         </li>
     );
   }

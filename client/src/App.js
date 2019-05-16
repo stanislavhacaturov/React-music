@@ -5,6 +5,7 @@ import Login from './Authorization/Login';
 import Home from './Authorization/Home';
 import AllMusicList from './MusicList/AllMusicList';
 import ProfilePage from './MusicList/ProfilePage';
+import PasswordEditPage from './MusicList/PasswordEdit';
 import MyMusic from './MusicList/MyMusicPage';
 
 import withAuth from './withAuth';
@@ -20,6 +21,7 @@ class App extends Component {
                 <Route path='/login' component={Login} />
                 <Route path='/music' component={withAuth(AllMusicList)} />
                 <Route path='/profile' component={withAuth(ProfilePage)} />
+                <Route path='/password' component={withAuth(PasswordEditPage)} />
                 <Route path='/mymusic' component={withAuth(MyMusic)} />
             </BrowserRouter>    
         )

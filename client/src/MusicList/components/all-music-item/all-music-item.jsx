@@ -27,9 +27,8 @@ class AllMusicItem extends Component {
     const { liked } = this.state
 
     return (
-      <li className="music-item">
-          <i onClick={this.likeSong} 
-            className={liked ? 'mark far fa-check-circle' : 'mark far fa-circle'} />
+      <li className="music-item1">
+          <button className='like' onClick={this.likeSong}>+ </button>
           <span className='text'>{text}</span>
       </li>
     );

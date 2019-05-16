@@ -34,7 +34,7 @@ class Login extends Component {
            localStorage.setItem('token', token)
            const { id } = res.data.user;
            localStorage.setItem('user', id)
-           this.props.history.push('/mymusic');
+           this.props.history.push('/music');
         }).catch(err => {
             this.setState({
                 error: err.response.data.error,

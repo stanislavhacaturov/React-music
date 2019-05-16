@@ -18,37 +18,39 @@
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
-  .profile {
-    margin: 0;
-    padding: 0;
-  }
-
-  .item {
-    font-size: 24px;
-    border-bottom: 1px solid #ededed;
-    min-height: 50px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-/* .link {
-  background-color: #6d6d6d;
-  color: #ffffff;
-  border: 2px solid #ffffff;
-  width: 15%;
-  font-size: 1em;
-  font-weight: lighter;
-  letter-spacing: 1px;
-  padding: 8px 10px;
+  .editPassword {
+    background-color: #6d6d6d;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    width: 15%;
+    padding: 5px 1px;
+    font-size: 1em;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    margin: 0em 22em ;
 }
 
-.link:hover {
+.editPassword:hover {
     color: #6d6d6d;
     background-color: #ffffff;
     border: 2px solid #6d6d6d;
-} */
+}
+
+.profile {
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+  min-height: 50px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 1em 0
+}
 
 .link1 { 
   border-radius: 10px;
